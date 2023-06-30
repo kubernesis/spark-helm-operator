@@ -117,7 +117,7 @@ run: manifests generate fmt vet ## Run against the configured Kubernetes cluster
 	
 .PHONY: build
 build: manifests generate fmt vet
-	go build main.go
+	go build -o bin/manager main.go
 
 .PHONY: docker-build
 docker-build: build test ## Build docker image with the manager.
