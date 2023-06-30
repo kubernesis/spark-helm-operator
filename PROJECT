@@ -10,4 +10,12 @@ plugins:
   scorecard.sdk.operatorframework.io/v2: {}
 projectName: spark-helm-operator
 repo: github.com/skattoju/spark-helm-operator
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  domain: my.domain
+  group: apachespark
+  kind: Spark
+  version: v1alpha1
 version: "3"

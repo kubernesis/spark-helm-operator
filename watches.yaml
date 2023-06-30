@@ -1,2 +1,6 @@
 # Use the 'create api' subcommand to add watches to this file.
+- group: apachespark.my.domain
+  version: v1alpha1
+  kind: Spark
+  chart: helm-charts/spark-operator
 #+kubebuilder:scaffold:watch

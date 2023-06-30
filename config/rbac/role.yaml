@@ -28,4 +28,41 @@ rules:
   verbs:
   - create
 
+##
+## Rules for apachespark.my.domain/v1alpha1, Kind: Spark
+##
+- apiGroups:
+  - apachespark.my.domain
+  resources:
+  - sparks
+  - sparks/status
+  - sparks/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+- verbs:
+  - "*"
+  apiGroups:
+  - "rbac.authorization.k8s.io"
+  resources:
+  - "rolebindings"
+  - "roles"
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+
 #+kubebuilder:scaffold:rules
