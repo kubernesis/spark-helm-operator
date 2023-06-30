@@ -1,0 +1,349 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: |-
+      [
+        {
+          "apiVersion": "apachespark.my.domain/v1alpha1",
+          "kind": "Spark",
+          "metadata": {
+            "name": "spark-sample"
+          },
+          "spec": {
+            "affinity": {},
+            "batchScheduler": {
+              "enable": false
+            },
+            "controllerThreads": 10,
+            "fullnameOverride": "",
+            "image": {
+              "pullPolicy": "IfNotPresent",
+              "repository": "ghcr.io/googlecloudplatform/spark-operator",
+              "tag": ""
+            },
+            "imagePullSecrets": [],
+            "ingressUrlFormat": "",
+            "istio": {
+              "enabled": false
+            },
+            "labelSelectorFilter": "",
+            "leaderElection": {
+              "lockName": "spark-operator-lock",
+              "lockNamespace": ""
+            },
+            "logLevel": 2,
+            "metrics": {
+              "enable": true,
+              "endpoint": "/metrics",
+              "port": 10254,
+              "portName": "metrics",
+              "prefix": ""
+            },
+            "nameOverride": "",
+            "nodeSelector": {},
+            "podAnnotations": {},
+            "podLabels": {},
+            "podMonitor": {
+              "enable": false,
+              "jobLabel": "spark-operator-podmonitor",
+              "labels": {},
+              "podMetricsEndpoint": {
+                "interval": "5s",
+                "scheme": "http"
+              }
+            },
+            "podSecurityContext": {},
+            "rbac": {
+              "create": false,
+              "createClusterRole": true,
+              "createRole": true
+            },
+            "replicaCount": 1,
+            "resourceQuotaEnforcement": {
+              "enable": false
+            },
+            "resources": {},
+            "resyncInterval": 30,
+            "securityContext": {},
+            "serviceAccounts": {
+              "spark": {
+                "annotations": {},
+                "create": true,
+                "name": ""
+              },
+              "sparkoperator": {
+                "annotations": {},
+                "create": true,
+                "name": ""
+              }
+            },
+            "sparkJobNamespace": "",
+            "tolerations": [],
+            "uiService": {
+              "enable": true
+            },
+            "volumeMounts": [],
+            "volumes": [],
+            "webhook": {
+              "cleanupAnnotations": {
+                "helm.sh/hook": "pre-delete, pre-upgrade",
+                "helm.sh/hook-delete-policy": "hook-succeeded"
+              },
+              "enable": false,
+              "initAnnotations": {
+                "helm.sh/hook": "pre-install, pre-upgrade",
+                "helm.sh/hook-weight": "50"
+              },
+              "namespaceSelector": "",
+              "port": 8080,
+              "timeout": 30
+            }
+          }
+        }
+      ]
+    capabilities: Basic Install
+    createdAt: "2023-06-30T16:48:22Z"
+    operators.operatorframework.io/builder: operator-sdk-v1.30.0
+    operators.operatorframework.io/project_layout: hybrid.helm.sdk.operatorframework.io/v1-alpha
+  name: spark-helm-operator.v0.0.1
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - kind: Spark
+      name: sparks.apachespark.my.domain
+      version: v1alpha1
+  description: An experimental helm based operator that wraps the spark on k8s helm
+    chart from google cloud platform enabling installation and workload management
+    of Apache Spark
+  displayName: Spark Helm Operator
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      clusterPermissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - namespaces
+          verbs:
+          - get
+        - apiGroups:
+          - ""
+          resources:
+          - secrets
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - events
+          verbs:
+          - create
+        - apiGroups:
+          - apachespark.my.domain
+          resources:
+          - sparks
+          - sparks/status
+          - sparks/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts
+          verbs:
+          - '*'
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - rolebindings
+          - roles
+          verbs:
+          - '*'
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          verbs:
+          - '*'
+        - apiGroups:
+          - authentication.k8s.io
+          resources:
+          - tokenreviews
+          verbs:
+          - create
+        - apiGroups:
+          - authorization.k8s.io
+          resources:
+          - subjectaccessreviews
+          verbs:
+          - create
+        serviceAccountName: spark-helm-operator-controller-manager
+      deployments:
+      - label:
+          app.kubernetes.io/component: manager
+          app.kubernetes.io/created-by: spark-helm-operator
+          app.kubernetes.io/instance: controller-manager
+          app.kubernetes.io/managed-by: kustomize
+          app.kubernetes.io/name: deployment
+          app.kubernetes.io/part-of: spark-helm-operator
+          control-plane: controller-manager
+        name: spark-helm-operator-controller-manager
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              control-plane: controller-manager
+          strategy: {}
+          template:
+            metadata:
+              annotations:
+                kubectl.kubernetes.io/default-container: manager
+              labels:
+                control-plane: controller-manager
+            spec:
+              affinity:
+                nodeAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    nodeSelectorTerms:
+                    - matchExpressions:
+                      - key: kubernetes.io/arch
+                        operator: In
+                        values:
+                        - amd64
+                        - arm64
+                        - ppc64le
+                        - s390x
+                      - key: kubernetes.io/os
+                        operator: In
+                        values:
+                        - linux
+              containers:
+              - args:
+                - --secure-listen-address=0.0.0.0:8443
+                - --upstream=http://127.0.0.1:8080/
+                - --logtostderr=true
+                - --v=0
+                image: gcr.io/kubebuilder/kube-rbac-proxy:v0.13.1
+                name: kube-rbac-proxy
+                ports:
+                - containerPort: 8443
+                  name: https
+                  protocol: TCP
+                resources:
+                  limits:
+                    cpu: 500m
+                    memory: 128Mi
+                  requests:
+                    cpu: 5m
+                    memory: 64Mi
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop:
+                    - ALL
+              - args:
+                - --health-probe-bind-address=:8081
+                - --metrics-bind-address=127.0.0.1:8080
+                - --leader-elect
+                - --leader-election-id=spark-helm-operator
+                image: quay.io/opdev/spark-helm-operator-controller:0.0.1
+                livenessProbe:
+                  httpGet:
+                    path: /healthz
+                    port: 8081
+                  initialDelaySeconds: 15
+                  periodSeconds: 20
+                name: manager
+                readinessProbe:
+                  httpGet:
+                    path: /readyz
+                    port: 8081
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+                resources:
+                  limits:
+                    cpu: 500m
+                    memory: 128Mi
+                  requests:
+                    cpu: 10m
+                    memory: 64Mi
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop:
+                    - ALL
+              securityContext:
+                runAsNonRoot: true
+              serviceAccountName: spark-helm-operator-controller-manager
+              terminationGracePeriodSeconds: 10
+      permissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          verbs:
+          - get
+          - list
+          - watch
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - coordination.k8s.io
+          resources:
+          - leases
+          verbs:
+          - get
+          - list
+          - watch
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - ""
+          resources:
+          - events
+          verbs:
+          - create
+          - patch
+        serviceAccountName: spark-helm-operator-controller-manager
+    strategy: deployment
+  installModes:
+  - supported: false
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - big data
+  - map reduce
+  - data science
+  links:
+  - name: Spark Helm Operator
+    url: https://spark-helm-operator.domain
+  maintainers:
+  - email: skattoju@redhat.com
+    name: Sid Kattoju
+  maturity: alpha
+  provider:
+    name: opdev
+    url: opdev.github.io
+  version: 0.0.1

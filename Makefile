@@ -51,7 +51,7 @@ endif
 OPERATOR_SDK_VERSION ?= v1.30.0
 
 # Image URL to use all building/pushing image targets
-IMG ?= controller:latest
+IMG ?= $(IMAGE_TAG_BASE)-controller:$(VERSION)
 # ENVTEST_K8S_VERSION refers to the version of kubebuilder assets to be downloaded by envtest binary.
 ENVTEST_K8S_VERSION = 1.25.0
 
@@ -68,7 +68,7 @@ SHELL = /usr/bin/env bash -o pipefail
 .SHELLFLAGS = -ec
 
 .PHONY: all
-all: build
+all: build bundle bundle-build bundle-push docker-build docker-push
 
 ##@ General
 
@@ -113,12 +113,15 @@ test: manifests generate fmt vet envtest ## Run tests.
 ##@ Build
 .PHONY: run
 run: manifests generate fmt vet ## Run against the configured Kubernetes cluster in ~/.kube/config
-	helm-operator
-	$(HELM_OPERATOR) run
+	go run ./main.go
 	
+.PHONY: build
+build: manifests generate fmt vet
+	go build main.go
+
 .PHONY: docker-build
-docker-build: test ## Build docker image with the manager.
-	docker build -t ${IMG}
+docker-build: build test ## Build docker image with the manager.
+	docker build -t ${IMG} . --load
 
 .PHONY: docker-push
 docker-push: ## Push docker image with the manager.
@@ -204,7 +207,7 @@ bundle: kustomize operator-sdk ## Generate bundle manifests and metadata, then v
 
 .PHONY: bundle-build
 bundle-build: ## Build the bundle image.
-	docker build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
+	docker build -f bundle.Dockerfile -t $(BUNDLE_IMG) . --load
 
 .PHONY: bundle-push
 bundle-push: ## Push the bundle image.

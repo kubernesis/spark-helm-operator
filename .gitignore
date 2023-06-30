@@ -12,3 +12,6 @@ bin
 *.swp
 *.swo
 *~
+
+# test coverage output
+cover.out

@@ -1,0 +1,46 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: '[]'
+    capabilities: Basic Install
+  name: spark-helm-operator.v0.0.0
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions: {}
+  description: An experimental helm based operator that wraps the spark on k8s helm
+    chart from google cloud platform enabling installation and workload management
+    of Apache Spark
+  displayName: Spark Helm Operator
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      deployments: null
+    strategy: ""
+  installModes:
+  - supported: false
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - big data
+  - map reduce
+  - data science
+  links:
+  - name: Spark Helm Operator
+    url: https://spark-helm-operator.domain
+  maintainers:
+  - email: skattoju@redhat.com
+    name: Sid Kattoju
+  maturity: alpha
+  provider:
+    name: opdev
+    url: opdev.github.io
+  version: 0.0.0
