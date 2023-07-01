@@ -27,7 +27,6 @@ rules:
   - events
   verbs:
   - create
-
 ##
 ## Rules for apachespark.my.domain/v1alpha1, Kind: Spark
 ##
@@ -64,5 +63,21 @@ rules:
   - "apps"
   resources:
   - "deployments"
-
+# hack for rbac
+- verbs:
+  - "*"
+  apiGroups:
+  - "rbac.authorization.k8s.io"
+  resources:
+  - "clusterrolebindings"
+  - "clusterroles"
+  - "rolebindings"
+  - "roles"
+# hack for crds
+- verbs:
+  - "*"
+  apiGroups:
+  - "apiextensions.k8s.io"
+  resources:
+  - "customresourcedefinitions"
 #+kubebuilder:scaffold:rules
