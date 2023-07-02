@@ -103,10 +103,10 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2023-07-01T19:09:47Z"
+    createdAt: "2023-07-02T14:18:42Z"
     operators.operatorframework.io/builder: operator-sdk-v1.30.0
     operators.operatorframework.io/project_layout: hybrid.helm.sdk.operatorframework.io/v1-alpha
-  name: spark-helm-operator.v0.0.1
+  name: spark-helm-operator.v0.0.3
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -273,7 +273,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=spark-helm-operator
-                image: quay.io/opdev/spark-helm-operator-controller:0.0.1
+                image: quay.io/opdev/spark-helm-operator-controller:0.0.3
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -361,4 +361,4 @@ spec:
   provider:
     name: opdev
     url: opdev.github.io
-  version: 0.0.1
+  version: 0.0.3
