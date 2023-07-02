@@ -7,7 +7,7 @@ metadata:
     categories: Big Data
     containerImage: quay.io/opdev/airflow-helm-operator:0.0.1
     description: An experimental operator that installs Apache Airflow.
-    operatorframework.io/initialization-resource: "{\n  \"apiVersion\": \"apachespark.my.domain/v1alpha1\",\n
+    operatorframework.io/initialization-resource: "{\n  \"apiVersion\": \"apachespark.apache.org/v1alpha1\",\n
       \ \"kind\": \"Spark\",\n  \"metadata\": {\n    \"name\": \"spark-operator\"\n
       \ },\n  \"spec\": {\n    \"affinity\": {},\n    \"batchScheduler\": {\n      \"enable\":
       false\n    },\n    \"controllerThreads\": 10,\n    \"fullnameOverride\": \"\",\n
@@ -47,7 +47,7 @@ spec:
     - description: Deploys the spark operator based on the google cloud platform helm
         chart
       kind: Spark
-      name: sparks.apachespark.my.domain
+      name: sparks.apachespark.apache.org
       version: v1alpha1
   description: An experimental helm based operator that wraps the spark on k8s helm
     chart from google cloud platform enabling installation and workload management
@@ -75,7 +75,7 @@ spec:
   - data science
   links:
   - name: Spark Helm Operator
-    url: https://spark-helm-operator.domain
+    url: https://github.com/skattoju/spark-helm-operator
   maintainers:
   - email: skattoju@redhat.com
     name: Sid Kattoju

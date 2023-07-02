@@ -5,7 +5,7 @@ metadata:
     alm-examples: |-
       [
         {
-          "apiVersion": "apachespark.my.domain/v1alpha1",
+          "apiVersion": "apachespark.apache.org/v1alpha1",
           "kind": "Spark",
           "metadata": {
             "name": "spark-operator"
@@ -100,14 +100,113 @@ metadata:
               "timeout": 30
             }
           }
+        },
+        {
+          "apiVersion": "sparkoperator.k8s.io/v1beta2",
+          "kind": "SparkApplication",
+          "metadata": {
+            "name": "pyspark-pi",
+            "namespace": "spark-operator"
+          },
+          "spec": {
+            "driver": {
+              "coreLimit": "1200m",
+              "cores": 1,
+              "labels": {
+                "version": "3.1.1"
+              },
+              "memory": "512m",
+              "serviceAccount": "spark-sample-spark"
+            },
+            "executor": {
+              "cores": 1,
+              "instances": 1,
+              "labels": {
+                "version": "3.1.1"
+              },
+              "memory": "512m"
+            },
+            "image": "gcr.io/spark-operator/spark-py:v3.1.1",
+            "imagePullPolicy": "Always",
+            "mainApplicationFile": "local:///opt/spark/examples/src/main/python/pi.py",
+            "mode": "cluster",
+            "pythonVersion": "3",
+            "restartPolicy": {
+              "onFailureRetries": 3,
+              "onFailureRetryInterval": 10,
+              "onSubmissionFailureRetries": 5,
+              "onSubmissionFailureRetryInterval": 20,
+              "type": "OnFailure"
+            },
+            "sparkVersion": "3.1.1",
+            "type": "Python"
+          }
+        },
+        {
+          "apiVersion": "sparkoperator.k8s.io/v1beta2",
+          "kind": "SparkApplication",
+          "metadata": {
+            "name": "spark-pi",
+            "namespace": "spark-operator"
+          },
+          "spec": {
+            "driver": {
+              "coreLimit": "1200m",
+              "cores": 1,
+              "labels": {
+                "version": "3.1.1"
+              },
+              "memory": "512m",
+              "serviceAccount": "spark-sample-spark",
+              "volumeMounts": [
+                {
+                  "mountPath": "/tmp",
+                  "name": "test-volume"
+                }
+              ]
+            },
+            "executor": {
+              "cores": 1,
+              "instances": 1,
+              "labels": {
+                "version": "3.1.1"
+              },
+              "memory": "512m",
+              "volumeMounts": [
+                {
+                  "mountPath": "/tmp",
+                  "name": "test-volume"
+                }
+              ]
+            },
+            "image": "gcr.io/spark-operator/spark:v3.1.1",
+            "imagePullPolicy": "Always",
+            "mainApplicationFile": "local:///opt/spark/examples/jars/spark-examples_2.12-3.1.1.jar",
+            "mainClass": "org.apache.spark.examples.SparkPi",
+            "mode": "cluster",
+            "restartPolicy": {
+              "type": "Never"
+            },
+            "sparkVersion": "3.1.1",
+            "type": "Scala",
+            "volumes": [
+              {
+                "hostPath": {
+                  "path": "/tmp",
+                  "type": "Directory"
+                },
+                "name": "test-volume"
+              }
+            ]
+          }
         }
       ]
     capabilities: Basic Install
     categories: Big Data
     containerImage: quay.io/opdev/airflow-helm-operator:0.0.1
-    createdAt: "2023-07-02T18:50:31Z"
+    createdAt: "2023-07-02T19:16:09Z"
     description: An experimental operator that installs Apache Airflow.
-    operatorframework.io/initialization-resource: "{\n  \"apiVersion\": \"apachespark.my.domain/v1alpha1\",\n
+    operatorframework.io/initialization-resource: "{\n  \"apiVersion\": \"apachespark.apache.org/v1alpha1\",\n
       \ \"kind\": \"Spark\",\n  \"metadata\": {\n    \"name\": \"spark-operator\"\n
       \ },\n  \"spec\": {\n    \"affinity\": {},\n    \"batchScheduler\": {\n      \"enable\":
       false\n    },\n    \"controllerThreads\": 10,\n    \"fullnameOverride\": \"\",\n
@@ -146,10 +245,16 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
+    - kind: ScheduledSparkApplication
+      name: scheduledsparkapplications.sparkoperator.k8s.io
+      version: v1beta2
+    - kind: SparkApplication
+      name: sparkapplications.sparkoperator.k8s.io
+      version: v1beta2
     - description: Deploys the spark operator based on the google cloud platform helm
         chart
       kind: Spark
-      name: sparks.apachespark.my.domain
+      name: sparks.apachespark.apache.org
       version: v1alpha1
   description: An experimental helm based operator that wraps the spark on k8s helm
     chart from google cloud platform enabling installation and workload management
@@ -181,7 +286,7 @@ spec:
           verbs:
           - create
         - apiGroups:
-          - apachespark.my.domain
+          - apachespark.apache.org
           resources:
           - sparks
           - sparks/status
@@ -389,7 +494,7 @@ spec:
   - data science
   links:
   - name: Spark Helm Operator
-    url: https://spark-helm-operator.domain
+    url: https://github.com/skattoju/spark-helm-operator
   maintainers:
   - email: skattoju@redhat.com
     name: Sid Kattoju

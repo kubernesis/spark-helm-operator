@@ -2,7 +2,7 @@
 # This file is used to track the info used to scaffold your project
 # and allow the plugins properly work.
 # More info: https://book.kubebuilder.io/reference/project-config.html
-domain: my.domain
+domain: apache.org
 layout:
 - hybrid.helm.sdk.operatorframework.io/v1-alpha
 plugins:
@@ -14,7 +14,7 @@ resources:
 - api:
     crdVersion: v1
     namespaced: true
-  domain: my.domain
+  domain: apache.org
   group: apachespark
   kind: Spark
   version: v1alpha1

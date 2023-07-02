@@ -1,4 +1,4 @@
-apiVersion: apachespark.my.domain/v1alpha1
+apiVersion: apachespark.apache.org/v1alpha1
 kind: Spark
 metadata:
   name: spark-operator

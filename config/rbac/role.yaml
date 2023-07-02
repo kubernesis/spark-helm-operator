@@ -28,10 +28,10 @@ rules:
   verbs:
   - create
 ##
-## Rules for apachespark.my.domain/v1alpha1, Kind: Spark
+## Rules for apachespark.apache.org/v1alpha1, Kind: Spark
 ##
 - apiGroups:
-  - apachespark.my.domain
+  - apachespark.apache.org
   resources:
   - sparks
   - sparks/status
