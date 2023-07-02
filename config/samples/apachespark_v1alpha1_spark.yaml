@@ -1,7 +1,7 @@
 apiVersion: apachespark.my.domain/v1alpha1
 kind: Spark
 metadata:
-  name: spark-sample
+  name: spark-operator
 spec:
   # Default values copied from <project_dir>/helm-charts/spark-operator/values.yaml
   affinity: {}

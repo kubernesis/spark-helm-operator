@@ -4,21 +4,61 @@ metadata:
   annotations:
     alm-examples: '[]'
     capabilities: Basic Install
+    categories: Big Data
+    containerImage: quay.io/opdev/airflow-helm-operator:0.0.1
+    description: An experimental operator that installs Apache Airflow.
+    operatorframework.io/initialization-resource: "{\n  \"apiVersion\": \"apachespark.my.domain/v1alpha1\",\n
+      \ \"kind\": \"Spark\",\n  \"metadata\": {\n    \"name\": \"spark-operator\"\n
+      \ },\n  \"spec\": {\n    \"affinity\": {},\n    \"batchScheduler\": {\n      \"enable\":
+      false\n    },\n    \"controllerThreads\": 10,\n    \"fullnameOverride\": \"\",\n
+      \   \"image\": {\n      \"pullPolicy\": \"IfNotPresent\",\n      \"repository\":
+      \"ghcr.io/googlecloudplatform/spark-operator\",\n      \"tag\": \"\"\n    },\n
+      \   \"imagePullSecrets\": [],\n    \"ingressUrlFormat\": \"\",\n    \"istio\":
+      {\n      \"enabled\": false\n    },\n    \"labelSelectorFilter\": \"\",\n    \"leaderElection\":
+      {\n      \"lockName\": \"spark-operator-lock\",\n      \"lockNamespace\": \"\"\n
+      \   },\n    \"logLevel\": 2,\n    \"metrics\": {\n      \"enable\": true,\n
+      \     \"endpoint\": \"/metrics\",\n      \"port\": 10254,\n      \"portName\":
+      \"metrics\",\n      \"prefix\": \"\"\n    },\n    \"nameOverride\": \"\",\n
+      \   \"nodeSelector\": {},\n    \"podAnnotations\": {},\n    \"podLabels\": {},\n
+      \   \"podMonitor\": {\n      \"enable\": false,\n      \"jobLabel\": \"spark-operator-podmonitor\",\n
+      \     \"labels\": {},\n      \"podMetricsEndpoint\": {\n        \"interval\":
+      \"5s\",\n        \"scheme\": \"http\"\n      }\n    },\n    \"podSecurityContext\":
+      {},\n    \"rbac\": {\n      \"create\": false,\n      \"createClusterRole\":
+      true,\n      \"createRole\": true\n    },\n    \"replicaCount\": 1,\n    \"resourceQuotaEnforcement\":
+      {\n      \"enable\": false\n    },\n    \"resources\": {},\n    \"resyncInterval\":
+      30,\n    \"securityContext\": {},\n    \"serviceAccounts\": {\n      \"spark\":
+      {\n        \"annotations\": {},\n        \"create\": true,\n        \"name\":
+      \"\"\n      },\n      \"sparkoperator\": {\n        \"annotations\": {},\n        \"create\":
+      true,\n        \"name\": \"\"\n      }\n    },\n    \"sparkJobNamespace\": \"\",\n
+      \   \"tolerations\": [],\n    \"uiService\": {\n      \"enable\": true\n    },\n
+      \   \"volumeMounts\": [],\n    \"volumes\": [],\n    \"webhook\": {\n      \"cleanupAnnotations\":
+      {\n        \"helm.sh/hook\": \"pre-delete, pre-upgrade\",\n        \"helm.sh/hook-delete-policy\":
+      \"hook-succeeded\"\n      },\n      \"enable\": false,\n      \"initAnnotations\":
+      {\n        \"helm.sh/hook\": \"pre-install, pre-upgrade\",\n        \"helm.sh/hook-weight\":
+      \"50\"\n      },\n      \"namespaceSelector\": \"\",\n      \"port\": 8080,\n
+      \     \"timeout\": 30\n    }\n  }\n}    "
+    operatorframework.io/suggested-namespace: spark-operator
   name: spark-helm-operator.v0.0.0
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
-  customresourcedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - description: Deploys the spark operator based on the google cloud platform helm
+        chart
+      kind: Spark
+      name: sparks.apachespark.my.domain
+      version: v1alpha1
   description: An experimental helm based operator that wraps the spark on k8s helm
     chart from google cloud platform enabling installation and workload management
     of Apache Spark
   displayName: Spark Helm Operator
   icon:
-  - base64data: ""
-    mediatype: ""
+  - base64data: PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpbmtzY2FwZTp2ZXJzaW9uPSIxLjAuMiAoZTg2Yzg3MDg3OSwgMjAyMS0wMS0xNSwgY3VzdG9tKSIgc29kaXBvZGk6ZG9jbmFtZT0iQXBhY2hlX1NwYXJrX2xvZ28uc3ZnIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA0MTQgMjE1IiB4bWw6c3BhY2U9InByZXNlcnZlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOmNjPSJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9ucyMiIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIgeG1sbnM6c29kaXBvZGk9Imh0dHA6Ly9zb2RpcG9kaS5zb3VyY2Vmb3JnZS5uZXQvRFREL3NvZGlwb2RpLTAuZHRkIj4KPHRpdGxlPkFwYWNoZSBTcGFyayBsb2dvPC90aXRsZT4KPG1ldGFkYXRhPgogICAgPHJkZjpSREY+CiAgICAgICAgPGNjOldvcmsgcmRmOmFib3V0PSIiPgogICAgICAgICAgICA8ZGM6Zm9ybWF0PmltYWdlL3N2Zyt4bWw8L2RjOmZvcm1hdD4KICAgICAgICAgICAgPGRjOnR5cGUgcmRmOnJlc291cmNlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvU3RpbGxJbWFnZSIvPgogICAgICAgICAgICA8ZGM6dGl0bGUvPgogICAgICAgIDwvY2M6V29yaz4KICAgIDwvcmRmOlJERj4KPC9tZXRhZGF0YT4KPHNvZGlwb2RpOm5hbWVkdmlldyBib3JkZXJjb2xvcj0iIzY2NjY2NiIgYm9yZGVyb3BhY2l0eT0iMSIgZ3JpZHRvbGVyYW5jZT0iMTAiIGd1aWRldG9sZXJhbmNlPSIxMCIgaW5rc2NhcGU6Y3VycmVudC1sYXllcj0iZzEyNjUwIiBpbmtzY2FwZTpjeD0iODkuMDkzNDgzIiBpbmtzY2FwZTpjeT0iMTc3LjQ5ODE5IiBpbmtzY2FwZTpwYWdlb3BhY2l0eT0iMCIgaW5rc2NhcGU6cGFnZXNoYWRvdz0iMiIgaW5rc2NhcGU6d2luZG93LWhlaWdodD0iMTAxNCIgaW5rc2NhcGU6d2luZG93LW1heGltaXplZD0iMSIgaW5rc2NhcGU6d2luZG93LXdpZHRoPSIxOTIwIiBpbmtzY2FwZTp3aW5kb3cteD0iMCIgaW5rc2NhcGU6d2luZG93LXk9IjM2IiBpbmtzY2FwZTp6b29tPSIxLjA4NjMxNSIgb2JqZWN0dG9sZXJhbmNlPSIxMCIgcGFnZWNvbG9yPSIjZmZmZmZmIiBzaG93Z3JpZD0iZmFsc2UiLz48ZyB0cmFuc2Zvcm09Im1hdHJpeCgxLjMzIDAgMCAxLjMzIDAgNC4wNWUtNikiIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiIGlua3NjYXBlOmxhYmVsPSJzcGFyayI+PHBhdGggZD0ibTI4NCA4MS41Yy0uMjY5LS41NzUtLjM5LS44NjQtLjUzNS0xLjE0LTMuODktNy40LTcuNzctMTQuOC0xMS43LTIyLjItLjM5NC0uNzQyLS4zNDQtMS4xOC4xOTUtMS44MiA2LjE5LTcuMjMgMTIuMy0xNC41IDE4LjUtMjEuNy4yMTktLjI1NC40MTQtLjUyMy40OTYtLjk3Ni0xLjguNDY5LTMuNi45MzMtNS40MSAxLjQxLTcuNDcgMS45OC0xNSAzLjk1LTIyLjQgNS45Ni0uNjk1LjE4Ny0xLjAxLS4wMTYtMS4zNi0uNTk0LTQuMjQtNy4wOS04LjUxLTE0LjItMTIuOC0yMS4yLS4yMTktLjM2Ny0uNDU4LS43MjMtLjkyNi0xLjAzLS4zNDQgMS44OS0uNjkyIDMuNzctMS4wMyA1LjY2LTEuMTkgNi42Ny0yLjM4IDEzLjMtMy41NiAyMC0uMTI5LjcxOS0uMzA1IDEuNDQtLjM2NyAyLjE2LS4wNTkuNjg4LS40MTQuOTQyLTEuMDQgMS4xNC04LjgxIDIuNzctMTcuNiA1LjU2LTI2LjQgOC4zNS0uMzg2LjEyMS0uNzY1LjI4MS0xLjE4LjY1NiA3LjIgMi44NiAxNC40IDUuNzIgMjEuNyA4LjYzLS4yNjYuMjExLS40NDIuMzc1LS42MzcuNS00LjUgMi45MS05LjAxIDUuODItMTMuNSA4Ljc0LS41MzkuMzUyLS45NjUuNDAyLTEuNTcuMTI5LTUuMzgtMi40Mi0xMC44LTQuOC0xNi4yLTcuMi0yLjQyLTEuMDgtNC41OS0yLjUxLTYuMjgtNC41OS0zLjgzLTQuNjgtMy4wNy0xMCAyLjAzLTEzLjMgMS42Ny0xLjA3IDMuNTctMS44NiA1LjQ2LTIuNDggOC42My0yLjgxIDE3LjMtNS41MiAyNS45LTguMjQuNzI2LS4yMzEgMS4wNi0uNTU1IDEuMi0xLjM0IDEuMTYtNi42OCAyLjM1LTEzLjQgMy41Ni0yMCAuNjQ0LTMuNTcuOTg0LTcuMjIgMi43Mi0xMC41LjY2NS0xLjI2IDEuNDYtMi40OSAyLjQyLTMuNTQgMy40NC0zLjgyIDguMjMtMy45NiAxMS45LS4zMjggMS4yMyAxLjIzIDIuMjggMi42NyAzLjE5IDQuMTYgNCA2LjUzIDcuOTQgMTMuMSAxMS45IDE5LjcuNDY1Ljc3Ny44ODMuOTMzIDEuNzQuNzA3IDkuNjUtMi41OSAxOS4zLTUuMTQgMjktNy42OSAyLS41MjcgNC4wMS0uNzE4IDYuMDYtLjMzNSA0LjQ1LjgzMiA2LjQgNC4yMiA0Ljg5IDguNTMtLjY4MyAxLjk2LTEuODcgMy42MS0zLjIgNS4xOC02Ljc0IDcuOTMtMTMuNSAxNS45LTIwLjIgMjMuOC0uNTUxLjY0OC0uNTYyIDEuMTEtLjE4IDEuODQgNC4wNCA3LjYxIDguMDQgMTUuMiAxMi4xIDIyLjkuOTYxIDEuODIgMS43IDMuNzIgMS43MiA1LjgxLjA0NyA0Ljc2LTMuNDQgOC42Ni04LjE3IDkuMzYtMi42NS4zODctNS4xMS0uMTc5LTcuNi0uOTQ1LTYuMDUtMS44Ny0xMi4xLTMuNzEtMTguMi01LjU0LS41NjMtLjE2OC0uNzc4LS4zOTEtLjg3OS0uOTk2LS42OTYtNC4yNy0xLjQ2LTguNTMtMi4yLTEyLjgtLjAxOS0uMTE3LjAxNi0uMjQyLjAzNi0uNTA0IDYuOTEgMS45MSAxMy44IDMuNzkgMjAuOSA1Ljc2IiBzdHlsZT0iZmlsbC1ydWxlOmV2ZW5vZGQ7ZmlsbDojZTI1YTFjIi8+PHBhdGggZD0ibTI3MiAxNDRjLTUuNDYtLjAwOC0xMC45LS4wMzUtMTYuNC0uMDExLS43MjMgMC0xLjEzLS4yMDctMS41My0uODIxLTYuNDYtOS44NC0xMy0xOS43LTE5LjQtMjkuNS0uMjA3LS4zMTItLjQyNi0uNjEzLS43OTMtMS4xNC0xLjM5IDEwLjYtMi43NiAyMS00LjEzIDMxLjRoLTE0LjNjLjE2OC0xLjM5LjMxNy0yLjc0LjQ5My00LjA4IDEuMzktMTAuNyAyLjgtMjEuMyA0LjItMzIgMS4zNC0xMC4yIDIuNjctMjAuNCA0LjAzLTMwLjYuMDM5LS4zMDEuMjQyLS42ODguNDg4LS44NDggNC45Mi0zLjIxIDkuODYtNi4zOSAxNC44LTkuNTcuMDcxLS4wNDcuMTcyLS4wNTEuNDI2LS4xMjUtMS40OSAxMS40LTIuOTcgMjIuNy00LjQ2IDM0IC4wNTkuMDM5LjExNy4wODIuMTc2LjEyMSA3Ljc1LTguNTggMTUuNS0xNy4yIDIzLjQtMjUuOS4yMjcgMS4zMi40MjYgMi40NS42MjEgMy41OC41NTUgMy4yMyAxLjA5IDYuNDggMS42OCA5LjcxLjEyMS42NTItLjA1NSAxLjA1LS40ODggMS41MS01LjAxIDUuMjQtMTAgMTAuNS0xNSAxNS44LS4yMTkuMjMxLS40MjYuNDY5LS42NzYuNzQzLjE2LjI1My4yOTcuNS40NTcuNzI2IDguNjEgMTIuMSAxNy4yIDI0LjIgMjUuOCAzNi4zLjE1Ni4yMTkuMzgyLjM5MS41NzQuNTg2di4xOTEiIHN0eWxlPSJmaWxsLXJ1bGU6ZXZlbm9kZDtmaWxsOiMzYzNhM2UiLz48cGF0aCBkPSJtMTAzIDExMmMtLjIxOS0xLjExLS4zNzUtMi43NS0uODcxLTQuMjgtMi40LTcuMzktOS45Ny0xMS40LTE3LjgtOS42MS04LjYxIDItMTQuOCA4Ljc3LTE1LjYgMTcuNi0uNjYgNi41IDIuODQgMTIuOCA5LjM0IDE1LjEgNS4yNCAxLjg5IDEwLjMgMS4xIDE1LTEuNzEgNi4yMS0zLjcyIDkuNTctOS4yNSAxMC0xNy4xem0tMzcuOCAyNy41Yy0uNDIyIDMuMTgtLjgyOCA2LjE3LTEuMjIgOS4xNy0uNTIzIDMuOTgtMS4wNSA3Ljk3LTEuNTUgMTItLjA1OC40NjUtLjE5OS42NzItLjY5OS42NjgtMy45My0uMDE1LTcuODYtLjAxMS0xMS44LS4wMTktLjA5IDAtLjE4LS4wNDctLjM5MS0uMTA5LjIzOC0xLjg4LjQ2OS0zLjc3LjcxNS01LjY1Ljg2Ny02LjYgMS43My0xMy4yIDIuNjEtMTkuOCAxLjAxLTcuNTYgMS44LTE1LjEgMy4wOS0yMi42IDIuMjgtMTMuMyAxMy42LTI0LjcgMjYuOC0yNy42IDcuNjctMS42NiAxNS0uODkxIDIxLjcgMy40MyA2LjY4IDQuMyAxMC41IDEwLjYgMTEuNCAxOC40IDEuMjQgMTEuMS0yLjg1IDIwLjMtMTAuNyAyOC01LjE4IDUuMDEtMTEuNCA4LjE5LTE4LjUgOS4yNy03LjM3IDEuMTEtMTQuMy0uMTE3LTIwLjUtNC40Ni0uMjI3LS4xNi0uNDczLS4zLS44NjMtLjU0NiIgc3R5bGU9ImZpbGwtcnVsZTpldmVub2RkO2ZpbGw6IzNjM2EzZSIvPjxwYXRoIGQ9Im01OC42IDc2LjVjLTQuNCAzLjI4LTguNjUgNi40NC0xMi45IDkuNjEtLjY4Ny0xLjA4LTEuMy0yLjE2LTIuMDItMy4xNy0xLjg1LTIuNTktNC4xNS00LjUyLTcuNDktNC43NS0yLjc4LS4xOTYtNS4xNi43MTgtNy4wNSAyLjc3LTEuNjkgMS44My0xLjkxIDQuNDQtLjMzMiA2LjUxIDEuNzQgMi4yOCAzLjY0IDQuNDQgNS41OSA2LjU1IDMuMjMgMy41IDYuNiA2Ljg2IDkuOCAxMC40IDIuOTEgMy4yIDUuMjQgNi43OCA1Ljk2IDExLjIuODU2IDUuMi0uMTgzIDEwLjEtMi42NCAxNC43LTQuNTUgOC40NS0xMS43IDEzLjQtMjEuMiAxNC45LTQuMTguNjc1LTguMzQuNTQzLTEyLjQtLjY1Ny01LjQxLTEuNTktOS4xOC01LjE0LTExLjYtMTAuMS0uODU1LTEuNzctMS41MS0zLjY0LTIuMjgtNS41NCA0LjczLTIuNTMgOS4zNC01IDE0LTcuNDkuMTYuMzg3LjI3Ny43MTEuNDI2IDEuMDIuNzk3IDEuNTkgMS40NSAzLjI4IDIuNDMgNC43NSAyLjkzIDQuMzUgNy42NSA1LjY3IDEyLjQgMy41MiAxLjIzLS41NTUgMi40Mi0xLjMzIDMuNDMtMi4yMyAzLjA4LTIuNzQgMy42Ni02LjU2IDEuMzgtMTAtMS4zMS0xLjk4LTIuOTUtMy43Ni00LjU1LTUuNTMtMy44Mi00LjI0LTcuOC04LjM1LTExLjUtMTIuNy0yLjU3LTIuOTgtNC4zMi02LjQ0LTQuODgtMTAuNC0uNjA1LTQuMzYuMjY2LTguNDYgMi41My0xMi4xIDUuNjMtOS4xMSAxMy44LTEzLjggMjQuNi0xMy41IDYuMTcuMjIzIDExLjEgMy4xMSAxNC45IDcuOTEgMS4xMyAxLjQyIDIuMTkgMi44OSAzLjM0IDQuNDMiIHN0eWxlPSJmaWxsLXJ1bGU6ZXZlbm9kZDtmaWxsOiMzYzNhM2UiLz48cGF0aCBkPSJtMTYzIDEyNWMtLjcxOSA1LjQ5LTEuNCAxMC43LTIuMSAxNS45LS4wMzkuMjY2LS4yNDYuNjI1LS40NjkuNzI3LTEwLjcgNC45NC0yNC43IDQuMjUtMzMuNC01LjY5LTQuNy01LjM0LTYuNjctMTEuNy02LjM4LTE4LjcuNjgzLTE2LjMgMTQuMi0zMC42IDMwLjQtMzIuNiA5LjQ1LTEuMTYgMTcuNyAxLjM5IDI0LjEgOC43NCA0LjM2IDUgNi4zOCAxMSA2LjA4IDE3LjYtLjE5NSA0LjM2LS44NzkgOC42OS0xLjQyIDEzLS43NyA2LjE0LTEuNjEgMTIuMy0yLjQyIDE4LjQtLjAzMS4yMTQtLjA3NC40MzMtLjEyNS43MTFoLTEyLjdjLjE2OC0xLjQxLjMyNC0yLjc5LjUwNC00LjE3LjkyMi03LjA5IDEuOTQtMTQuMiAyLjc1LTIxLjMuNTA0LTQuNDIuMTg3LTguODEtMS44NC0xMi45LTIuMTUtNC4zNS01Ljc1LTYuNjYtMTAuNS03LjE2LTkuODItMS4wNC0xOS4yIDUuNzgtMjEuMiAxNS40LTEuMzggNi4zOC43OTcgMTIuNSA1Ljg4IDE1LjkgNC45NSAzLjI5IDEwLjIgMy4zIDE1LjYgMS4xNyAyLjc0LTEuMDggNS4wNi0yLjggNy4yOC01LjExIiBzdHlsZT0iZmlsbC1ydWxlOmV2ZW5vZGQ7ZmlsbDojM2MzYTNlIi8+PHBhdGggZD0ibTIxNyA4Ni4zYy0uNTgyIDQuNDItMS4xNiA4Ljc3LTEuNzQgMTMuMi0yLjcgMC01LjM0LS4wMTUtNy45OC4wMDQtMi4xNC4wMTYtNC4wOSAxLjQtNC43NCAzLjQtLjI1Ljc4MS0uMzQzIDEuNjItLjQ1MyAyLjQ0LTEuMzQgMTAuMi0yLjY3IDIwLjMtNCAzMC40LS4zMzYgMi41Ni0uNjYgNS4xMi0uOTk2IDcuNzJoLTEzLjNjLjI0Ni0xLjk1LjQ4LTMuODQuNzI2LTUuNzMuODYzLTYuNTggMS43My0xMy4yIDIuNi0xOS43Ljc1NC01LjY5IDEuNDMtMTEuNCAyLjMyLTE3LjEgMS4xOS03LjYgOC43NS0xNC40IDE2LjQtMTQuNyAzLjY2LS4xNiA3LjMzLS4wMjcgMTEuMS0uMDI3IiBzdHlsZT0iZmlsbC1ydWxlOmV2ZW5vZGQ7ZmlsbDojM2MzYTNlIi8+PHBhdGggZD0ibTI4OCAxNDR2LTUuNmgtLjAzMWwtMi4yIDUuNmgtLjY5OWwtMi4yLTUuNmgtLjAzNXY1LjZoLTEuMXYtNi43MWgxLjcxbDIgNS4xIDEuOTctNS4xaDEuN3Y2Ljcxem0tOS43NC01LjgxdjUuODFoLTEuMXYtNS44MWgtMi4xdi0uODk5aDUuMzF2Ljg5OWgtMi4xIiBzdHlsZT0iZmlsbDojM2MzYTNlIi8+PHBhdGggZD0ibTc2LjMgNjcuMWgzLjI5bC0uNzc4LTQuOTh6bTMuODEgMy4yMmgtNS40N2wtMS43NCAzLjQxaC0zLjg4bDguNTUtMTZoMy43NGwyLjkxIDE2aC0zLjU5bC0uNTE2LTMuNDEiIHN0eWxlPSJmaWxsOiMzYzNhM2UiLz48cGF0aCBkPSJtOTkuNyA2MWgtMS45NWwtLjY1NiAzLjY5aDEuOTVjMS4xOCAwIDIuMTEtLjc3MyAyLjExLTIuMjMgMC0uOTY1LS41ODYtMS40Ni0xLjQ2LTEuNDZ6bS00LjcyLTMuMjJoNS4xMmMyLjY4IDAgNC41NSAxLjYgNC41NSA0LjM0IDAgMy40Ni0yLjQ0IDUuNzgtNS45MiA1Ljc4aC0yLjIxbC0xLjA0IDUuODVoLTMuMzRsMi44Mi0xNiIgc3R5bGU9ImZpbGw6IzNjM2EzZSIvPjxwYXRoIGQ9Im0xMTYgNjcuMWgzLjI5bC0uNzc3LTQuOTh6bTMuOCAzLjIyaC01LjQ3bC0xLjc0IDMuNDFoLTMuODhsOC41NS0xNmgzLjc0bDIuOTEgMTZoLTMuNTlsLS41MTYtMy40MSIgc3R5bGU9ImZpbGw6IzNjM2EzZSIvPjxwYXRoIGQ9Im0xNDEgNzMuMmMtMS4xMy41MTYtMi4zNy44MjQtMy42Mi44MjQtNC4yMyAwLTYuODgtMy4xNy02Ljg4LTcuMTQgMC01LjA4IDQuMjctOS4zNSA5LjM1LTkuMzUgMS4yNyAwIDIuNDIuMzA1IDMuMzYuODJsLS40NjkgMy44M2MtLjcwMy0uNzc3LTEuODQtMS4zMi0zLjI0LTEuMzItMi45MSAwLTUuNSAyLjYzLTUuNSA1LjY4IDAgMi4zMiAxLjQ2IDQuMTQgMy43NiA0LjE0IDEuNDEgMCAyLjc3LS41NDMgMy42OS0xLjI5bC0uNDQ1IDMuOCIgc3R5bGU9ImZpbGw6IzNjM2EzZSIvPjxwYXRoIGQ9Im0xNjIgNjcuM2gtNi45NWwtMS4xMyA2LjQzaC0zLjMzbDIuODItMTZoMy4zNGwtMS4xMiA2LjMyaDYuOTVsMS4xMy02LjMyaDMuMzRsLTIuODIgMTZoLTMuMzRsMS4xMi02LjQzIiBzdHlsZT0iZmlsbDojM2MzYTNlIi8+PHBhdGggZD0ibTE3NCA3My43IDIuODItMTZoOC44NmwtLjU2MyAzLjIyaC01LjUybC0uNTYzIDMuMWg1LjA3bC0uNTYzIDMuMjJoLTUuMDdsLS41NjMgMy4yMmg1LjUybC0uNTYzIDMuMjJoLTguODYiIHN0eWxlPSJmaWxsOiMzYzNhM2UiLz48L2c+PC9zdmc+Cg==
+    mediatype: image/svg+xml
   install:
     spec:
-      deployments: null
+      deployments: []
     strategy: ""
   installModes:
   - supported: false
@@ -40,6 +80,7 @@ spec:
   - email: skattoju@redhat.com
     name: Sid Kattoju
   maturity: alpha
+  minKubeVersion: 1.25.0
   provider:
     name: opdev
     url: opdev.github.io
