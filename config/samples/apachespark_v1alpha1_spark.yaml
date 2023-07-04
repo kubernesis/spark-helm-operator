@@ -2,6 +2,8 @@ apiVersion: apachespark.apache.org/v1alpha1
 kind: Spark
 metadata:
   name: spark-operator
+  annotations:
+    helm.sdk.operatorframework.io/install-disable-crds: true
 spec:
   # Default values copied from <project_dir>/helm-charts/spark-operator/values.yaml
   affinity: {}
