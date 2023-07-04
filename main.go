@@ -26,6 +26,7 @@ import (
 	"github.com/operator-framework/helm-operator-plugins/pkg/annotation"
 	"github.com/operator-framework/helm-operator-plugins/pkg/reconciler"
 	"github.com/operator-framework/helm-operator-plugins/pkg/watches"
+	"github.com/skattoju/spark-helm-operator/customannotations"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 
 	ctrlruntime "k8s.io/apimachinery/pkg/runtime"
@@ -123,7 +124,7 @@ func main() {
 			reconciler.SkipDependentWatches(w.WatchDependentResources != nil && !*w.WatchDependentResources),
 			reconciler.WithMaxConcurrentReconciles(maxConcurrentReconciles),
 			reconciler.WithReconcilePeriod(reconcilePeriod),
-			reconciler.WithInstallAnnotations(annotation.DefaultInstallAnnotations...),
+			reconciler.WithInstallAnnotations(customannotations.CustomInstallAnnotations...),
 			reconciler.WithUpgradeAnnotations(annotation.DefaultUpgradeAnnotations...),
 			reconciler.WithUninstallAnnotations(annotation.DefaultUninstallAnnotations...),
 		)
