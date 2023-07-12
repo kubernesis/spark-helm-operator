@@ -269,7 +269,7 @@ metadata:
     capabilities: Basic Install
     categories: Big Data
     containerImage: quay.io/opdev/spark-helm-operator:0.0.1
-    createdAt: "2023-07-12T21:58:56Z"
+    createdAt: "2023-07-12T22:18:37Z"
     description: An experimental operator that installs the spark on k8s operator
       from its helm chart.
     operatorframework.io/initialization-resource: "{\n  \"apiVersion\": \"apachespark.apache.org/v1alpha1\",\n
@@ -564,7 +564,7 @@ spec:
   - email: skattoju@redhat.com
     name: Sid Kattoju
   maturity: alpha
-  minKubeVersion: 1.25.0
+  minKubeVersion: 1.23.0
   provider:
     name: opdev
     url: opdev.github.io
