@@ -106,6 +106,68 @@ metadata:
         },
         {
           "apiVersion": "sparkoperator.k8s.io/v1beta2",
+          "kind": "ScheduledSparkApplication",
+          "metadata": {
+            "name": "spark-pi-scheduled",
+            "namespace": "spark-operator"
+          },
+          "spec": {
+            "concurrencyPolicy": "Allow",
+            "schedule": "@every 5m",
+            "template": {
+              "driver": {
+                "coreLimit": "1200m",
+                "cores": 1,
+                "labels": {
+                  "version": "3.1.1"
+                },
+                "memory": "512m",
+                "serviceAccount": "spark-sample-spark",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/tmp",
+                    "name": "test-volume"
+                  }
+                ]
+              },
+              "executor": {
+                "cores": 1,
+                "instances": 1,
+                "labels": {
+                  "version": "3.1.1"
+                },
+                "memory": "512m",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/tmp",
+                    "name": "test-volume"
+                  }
+                ]
+              },
+              "image": "gcr.io/spark-operator/spark:v3.1.1",
+              "imagePullPolicy": "Always",
+              "mainApplicationFile": "local:///opt/spark/examples/jars/spark-examples_2.12-3.1.1.jar",
+              "mainClass": "org.apache.spark.examples.SparkPi",
+              "mode": "cluster",
+              "restartPolicy": {
+                "type": "Never"
+              },
+              "sparkVersion": "3.1.1",
+              "type": "Scala",
+              "volumes": [
+                {
+                  "hostPath": {
+                    "path": "/tmp",
+                    "type": "Directory"
+                  },
+                  "name": "test-volume"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "apiVersion": "sparkoperator.k8s.io/v1beta2",
           "kind": "SparkApplication",
           "metadata": {
             "name": "pyspark-pi",
@@ -207,7 +269,7 @@ metadata:
     capabilities: Basic Install
     categories: Big Data
     containerImage: quay.io/opdev/airflow-helm-operator:0.0.1
-    createdAt: "2023-07-04T20:10:10Z"
+    createdAt: "2023-07-12T21:02:25Z"
     description: An experimental operator that installs Apache Airflow.
     operatorframework.io/initialization-resource: "{\n  \"apiVersion\": \"apachespark.apache.org/v1alpha1\",\n
       \ \"kind\": \"Spark\",\n  \"metadata\": {\n    \"name\": \"spark-operator\"\n
@@ -248,14 +310,19 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
-    - kind: ScheduledSparkApplication
+    - description: Deploys a scheduled spark application based on the spec provided
+      displayName: Scheduled Spark Application
+      kind: ScheduledSparkApplication
       name: scheduledsparkapplications.sparkoperator.k8s.io
       version: v1beta2
-    - kind: SparkApplication
+    - description: Deploys a spark application based on the spec provided
+      displayName: Spark Application
+      kind: SparkApplication
       name: sparkapplications.sparkoperator.k8s.io
       version: v1beta2
     - description: Deploys the spark operator based on the google cloud platform helm
         chart
+      displayName: Spark Operator
       kind: Spark
       name: sparks.apachespark.apache.org
       version: v1alpha1
