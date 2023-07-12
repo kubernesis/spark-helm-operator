@@ -46,9 +46,20 @@ spec:
     owned:
     - description: Deploys the spark operator based on the google cloud platform helm
         chart
+      displayName: Spark Operator
       kind: Spark
       name: sparks.apachespark.apache.org
       version: v1alpha1
+    - description: Deploys a spark application based on the spec provided
+      displayName: Spark Application
+      kind: SparkApplication
+      name: sparkapplications.sparkoperator.k8s.io
+      version: v1beta2
+    - description: Deploys a scheduled spark application based on the spec provided
+      displayName: Scheduled Spark Application
+      kind: ScheduledSparkApplication
+      name: scheduledsparkapplications.sparkoperator.k8s.io
+      version: v1beta2
   description: An experimental helm based operator that wraps the spark on k8s helm
     chart from google cloud platform enabling installation and workload management
     of Apache Spark
