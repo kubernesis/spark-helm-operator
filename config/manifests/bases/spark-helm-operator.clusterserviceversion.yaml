@@ -5,7 +5,7 @@ metadata:
     alm-examples: '[]'
     capabilities: Basic Install
     categories: Big Data
-    containerImage: quay.io/opdev/spark-helm-operator:0.0.1
+    containerImage: quay.io/opdev/spark-helm-operator-controller:0.0.1
     description: An experimental operator that installs the spark on k8s operator
       from its helm chart.
     operatorframework.io/initialization-resource: "{\n  \"apiVersion\": \"apachespark.apache.org/v1alpha1\",\n
