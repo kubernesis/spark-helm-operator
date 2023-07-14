@@ -290,7 +290,7 @@ metadata:
     capabilities: Basic Install
     categories: Big Data
     containerImage: quay.io/opdev/spark-helm-operator-controller:0.0.1
-    createdAt: "2023-07-14T16:33:37Z"
+    createdAt: "2023-07-14T16:39:20Z"
     description: An experimental operator that installs the spark on k8s operator
       from its helm chart.
     operatorframework.io/initialization-resource: "{\n  \"apiVersion\": \"apachespark.apache.org/v1alpha1\",\n
@@ -516,8 +516,8 @@ spec:
                   periodSeconds: 10
                 resources:
                   limits:
-                    cpu: 500m
-                    memory: 128Mi
+                    cpu: "1"
+                    memory: 512Mi
                   requests:
                     cpu: 10m
                     memory: 64Mi
