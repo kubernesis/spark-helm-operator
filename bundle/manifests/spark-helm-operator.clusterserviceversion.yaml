@@ -122,7 +122,7 @@ metadata:
                   "version": "3.1.1"
                 },
                 "memory": "512m",
-                "serviceAccount": "spark-sample-spark",
+                "serviceAccount": "spark-operator-spark",
                 "volumeMounts": [
                   {
                     "mountPath": "/tmp",
@@ -181,7 +181,13 @@ metadata:
                 "version": "3.1.1"
               },
               "memory": "512m",
-              "serviceAccount": "spark-sample-spark"
+              "serviceAccount": "spark-operator-spark",
+              "volumeMounts": [
+                {
+                  "mountPath": "/tmp",
+                  "name": "test-volume"
+                }
+              ]
             },
             "executor": {
               "cores": 1,
@@ -189,7 +195,13 @@ metadata:
               "labels": {
                 "version": "3.1.1"
               },
-              "memory": "512m"
+              "memory": "512m",
+              "volumeMounts": [
+                {
+                  "mountPath": "/tmp",
+                  "name": "test-volume"
+                }
+              ]
             },
             "image": "gcr.io/spark-operator/spark-py:v3.1.1",
             "imagePullPolicy": "Always",
@@ -204,7 +216,16 @@ metadata:
               "type": "OnFailure"
             },
             "sparkVersion": "3.1.1",
-            "type": "Python"
+            "type": "Python",
+            "volumes": [
+              {
+                "hostPath": {
+                  "path": "/tmp",
+                  "type": "Directory"
+                },
+                "name": "test-volume"
+              }
+            ]
           }
         },
         {
@@ -222,7 +243,7 @@ metadata:
                 "version": "3.1.1"
               },
               "memory": "512m",
-              "serviceAccount": "spark-sample-spark",
+              "serviceAccount": "spark-operator-spark",
               "volumeMounts": [
                 {
                   "mountPath": "/tmp",
@@ -269,7 +290,7 @@ metadata:
     capabilities: Basic Install
     categories: Big Data
     containerImage: quay.io/opdev/spark-helm-operator-controller:0.0.1
-    createdAt: "2023-07-13T14:52:38Z"
+    createdAt: "2023-07-14T16:33:37Z"
     description: An experimental operator that installs the spark on k8s operator
       from its helm chart.
     operatorframework.io/initialization-resource: "{\n  \"apiVersion\": \"apachespark.apache.org/v1alpha1\",\n

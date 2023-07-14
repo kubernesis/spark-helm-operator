@@ -3,7 +3,7 @@ kind: Spark
 metadata:
   name: spark-operator
   annotations:
-    helm.sdk.operatorframework.io/install-disable-crds: true
+    helm.sdk.operatorframework.io/install-disable-crds: "true"
 spec:
   # Default values copied from <project_dir>/helm-charts/spark-operator/values.yaml
   affinity: {}

@@ -1,7 +1,7 @@
 ## Append samples of your project ##
 resources:
 - apachespark_v1alpha1_spark.yaml
-- pyspark-pi.yaml
 - spark-pi.yaml
 - spark-pi-scheduled.yaml
+- pyspark-pi.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples
